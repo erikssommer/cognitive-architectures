@@ -6,7 +6,7 @@ import sys
 import matplotlib.pyplot as plt
 
 # Function that creates a series of numbers using chaos theory
-def logistic_map(x0: float, rate: float, n: int) -> list:
+def logistic_map(x0: float, rate: float, n: int) -> tuple:
     x_values = []
     r = rate # Rate, (The Edge of Chaos (r ≈ 3.57))
     x = x0 # Initial value
