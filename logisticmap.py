@@ -29,7 +29,7 @@ def plot_line_chart(x: int, y: float, x_label: str, y_label: str, title: str) ->
     plt.legend(loc = 'upper right')
     plt.show()
 
-# Create and plot 100 random-chaos numbers given initial value and rate
+# Create and plot 100 random-chaos numbers given initial value and rate from shell input
 init_value_x = sys.argv[1]
 x0 = float(init_value_x)
 rate = sys.argv[2]
