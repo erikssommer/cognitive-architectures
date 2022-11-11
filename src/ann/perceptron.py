@@ -7,16 +7,17 @@ def readFiles(filename):
         # Skip the first line
         next(readCSV)
 
-        data = []
+        inputs = []
+        desired = []
         for row in readCSV:
-            
-
-            data.append([float(row[0]), float(row[1]), float(row[2])])
-        return data
+            inputs.append([float(row[0]), float(row[1])])
+            desired.append(float(row[2]))
+        
+        return inputs, desired
 
 if __name__ == '__main__':
-    input = sys.argv[1]
+    filename = sys.argv[1]
 
-    data = readFiles(input)
+    inputs, desired = readFiles(filename)
 
-    print(data)
+    
