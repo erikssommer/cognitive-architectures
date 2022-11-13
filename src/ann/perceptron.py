@@ -11,7 +11,7 @@ class Perceptron:
         self.inputs = inputs
         self.learning_data = learning_data
         self.learning_rate = learning_rate
-        self.epochs = epochs  # number of iterations
+        self.epochs = epochs  # Number of iterations
 
     def activation(self, input):
         """
@@ -36,7 +36,7 @@ class Perceptron:
         # Training.
         for _ in range(self.epochs):
 
-            # counter to store misclassified.
+            # Counter to store misclassified.
             error_counter = 0
 
             # Looping for every example
@@ -62,6 +62,40 @@ class Perceptron:
         return theta, misclassified
 
 
+def get_dataset_filename():
+    """
+    Get the filename of the dataset to be used
+    """
+    if len(sys.argv) == 2:
+        return sys.argv[1]
+    else:
+        print('Please provide the filename of the dataset')
+        exit()
+
+
+def clean_dataset(filename):
+    """
+    Clean the dataset to make it linearly separable
+    """
+    # Retrieving the original filename
+    original_filename = filename.split('_', 1)[0]
+    # Making a copy of the original file
+    shutil.copy(f'../../data/{original_filename}.csv',
+                f'../../data/{filename}.csv')
+
+    df = pd.read_csv(f'../../data/{filename}.csv')
+
+    # Update third column to 1 if first column is negative
+    for index, row in df.iterrows():
+        if row[0] < 0:
+            df.at[index, 'y'] = 1
+        else:
+            df.at[index, 'y'] = 0
+
+    # Save to csv
+    df.to_csv('../../data/dataset_clean.csv', index=False)
+
+
 def read_file(filename):
     """
     Read the file and return the data as a numpy array with inputs and desired outputs.
@@ -77,28 +111,6 @@ def read_file(filename):
             desired.append(row[2])
 
         return np.array(inputs), np.array(desired)
-
-
-def clean_dataset(filename):
-    """
-    Clean the dataset to make it linearly separable
-    """
-    # Retrieving the original filename
-    original_filename = filename.split('_', 1)[0]
-    # Making a copy of the original file
-    shutil.copy(f'../../data/{original_filename}.csv', f'../../data/{filename}.csv')
-
-    df = pd.read_csv(f'../../data/{filename}.csv')
-
-    # Update third column to 1 if first column is negative
-    for index, row in df.iterrows():
-        if row[0] < 0:
-            df.at[index, 'y'] = 1
-        else:
-            df.at[index, 'y'] = 0
-
-    # Save to csv
-    df.to_csv('../../data/dataset_clean.csv', index=False)
 
 
 def plot_decision_boundary(inputs, y, theta, filename):
@@ -125,7 +137,7 @@ def plot_decision_boundary(inputs, y, theta, filename):
 
 if __name__ == '__main__':
     # Dataset filename to be used
-    filename = sys.argv[1]
+    filename = get_dataset_filename()
 
     # Clean dataset to make it linearly separable
     if 'clean' in filename:
