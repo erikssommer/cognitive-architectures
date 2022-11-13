@@ -71,6 +71,28 @@ def readFiles(filename):
         return np.array(inputs), np.array(desired)
 
 
+def plot_decision_boundary(inputs, y, theta, filename):
+
+    # The Line is y=ax+b
+    # So, Equate ax+b = theta0.X0 + theta1.X1 + theta2.X2
+    # Solving we find m and c
+    x1 = [min(inputs[:, 0]), max(inputs[:, 0])]
+    a = -theta[1]/theta[2]
+    b = -theta[0]/theta[2]
+    x2 = a*x1 + b
+
+    # Plotting
+    plt.figure(figsize=(10, 8))
+    plt.plot(inputs[:, 0][y == 0], inputs[:, 1][y == 0], "r^")
+    plt.plot(inputs[:, 0][y == 1], inputs[:, 1][y == 1], "bs")
+    plt.xlabel("feature 1")
+    plt.ylabel("feature 2")
+    plt.title('Perceptron Algorithm')
+    plt.plot(x1, x2, 'y-')
+    plt.savefig(f'../../images/{filename}.png')
+    plt.show()
+
+
 if __name__ == '__main__':
     filename = sys.argv[1]
 
@@ -79,3 +101,5 @@ if __name__ == '__main__':
     perceptron = Perceptron(inputs, desired, 0.5, 100)
 
     theta, misclassified = perceptron.train()
+
+    plot_decision_boundary(inputs, desired, theta, filename)
