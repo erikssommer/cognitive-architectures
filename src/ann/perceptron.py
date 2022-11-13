@@ -62,7 +62,7 @@ class Perceptron:
         return theta, misclassified
 
 
-def readFile(filename):
+def read_file(filename):
     """
     Read the file and return the data as a numpy array with inputs and desired outputs.
     """
@@ -132,7 +132,7 @@ if __name__ == '__main__':
         clean_dataset(filename)
 
     # Reading the dataset and formatting it
-    inputs, desired = readFile(filename)
+    inputs, desired = read_file(filename)
 
     # Initializing the Perceptron
     perceptron = Perceptron(inputs, desired, 0.5, 100)
