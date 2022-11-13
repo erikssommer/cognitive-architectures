@@ -13,9 +13,11 @@ class Perceptron:
         self.learning_rate = learning_rate
         self.epochs = epochs  # number of iterations
 
+    # Step function for the activation
     def activation(self, input):
         return 1.0 if input > 0 else 0.0
 
+    # Perceptron learning rule
     def train(self):
 
         _, features = self.inputs.shape
@@ -24,9 +26,8 @@ class Perceptron:
         # +1 in n+1 for the bias term.
         theta = np.zeros((features + 1, 1))
 
-        # Empty list to store how many examples were
-        # misclassified at every iteration.
-        n_miss_list = []
+        # List to store how many examples were misclassified at every iteration.
+        misclassified = []
 
         # Training.
         for _ in range(self.epochs):
@@ -51,14 +52,13 @@ class Perceptron:
                     # Incrementing by 1
                     n_miss += 1
 
-            # Appending number of misclassified examples
-            # at every iteration.
-            n_miss_list.append(n_miss)
+            # Appending number of misclassified examples at every iteration.
+            misclassified.append(n_miss)
 
-        return theta, n_miss_list
+        return theta, misclassified
 
 
-def readFiles(filename):
+def readFile(filename):
     with open(f'../../data/{filename}.csv') as csvfile:
         readCSV = pd.read_csv(csvfile, skiprows=1,
                               header=None, delimiter=',').to_numpy()
@@ -74,38 +74,36 @@ def readFiles(filename):
 
 def clean_dataset():
     shutil.copy('../../data/dataset.csv', '../../data/dataset_clean.csv')
-    
+
     df = pd.read_csv('../../data/dataset_clean.csv')
-    
+
     # update third column to 1 if first column is negative
     for index, row in df.iterrows():
         if row[0] < 0:
             df.at[index, 'y'] = 1
         else:
             df.at[index, 'y'] = 0
-    
+
     # save to csv
     df.to_csv('../../data/dataset_clean.csv', index=False)
 
 
 def plot_decision_boundary(inputs, y, theta, filename):
 
-    # The Line is y=ax+b
-    # So, Equate ax+b = theta0.X0 + theta1.X1 + theta2.X2
-    # Solving we find m and c
+    # Equation ax+b = theta0.X0 + theta1.X1 + theta2.X2
     x1 = [min(inputs[:, 0]), max(inputs[:, 0])]
     a = -theta[1]/theta[2]
     b = -theta[0]/theta[2]
-    x2 = a*x1 + b
+    x2 = a * x1 + b
 
-    # Plotting
+    # Plotting the decision boundary
     plt.figure(figsize=(10, 8))
-    plt.plot(inputs[:, 0][y == 0], inputs[:, 1][y == 0], "r^")
-    plt.plot(inputs[:, 0][y == 1], inputs[:, 1][y == 1], "bs")
-    plt.xlabel("feature 1")
-    plt.ylabel("feature 2")
-    plt.title('Perceptron Algorithm')
-    plt.plot(x1, x2, 'y-')
+    plt.plot(inputs[:, 0][y == 0], inputs[:, 1][y == 0], "o", color="red")
+    plt.plot(inputs[:, 0][y == 1], inputs[:, 1][y == 1], "o", color="blue")
+    plt.title('Perceptron Decision Boundary')
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.plot(x1, x2, color='black')
     plt.savefig(f'../../images/{filename}.png')
     plt.show()
 
@@ -116,7 +114,7 @@ if __name__ == '__main__':
     if filename == 'dataset_clean':
         clean_dataset()
 
-    inputs, desired = readFiles(filename)
+    inputs, desired = readFile(filename)
 
     perceptron = Perceptron(inputs, desired, 0.5, 100)
 
