@@ -2,6 +2,7 @@ import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import shutil
 
 
 class Perceptron:
@@ -71,6 +72,22 @@ def readFiles(filename):
         return np.array(inputs), np.array(desired)
 
 
+def clean_dataset():
+    shutil.copy('../../data/dataset.csv', '../../data/dataset_clean.csv')
+    
+    df = pd.read_csv('../../data/dataset_clean.csv')
+    
+    # update third column to 1 if first column is negative
+    for index, row in df.iterrows():
+        if row[0] < 0:
+            df.at[index, 'y'] = 1
+        else:
+            df.at[index, 'y'] = 0
+    
+    # save to csv
+    df.to_csv('../../data/dataset_clean.csv', index=False)
+
+
 def plot_decision_boundary(inputs, y, theta, filename):
 
     # The Line is y=ax+b
@@ -95,6 +112,9 @@ def plot_decision_boundary(inputs, y, theta, filename):
 
 if __name__ == '__main__':
     filename = sys.argv[1]
+
+    if filename == 'dataset_clean':
+        clean_dataset()
 
     inputs, desired = readFiles(filename)
 
