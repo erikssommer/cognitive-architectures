@@ -102,7 +102,9 @@ def clean_dataset(filename):
 
 
 def plot_decision_boundary(inputs, y, theta, filename):
-
+    """
+    Plot the decision boundary
+    """
     # Equation ax+b = theta0.X0 + theta1.X1 + theta2.X2
     a = -theta[1]/theta[2]
     b = -theta[0]/theta[2]
