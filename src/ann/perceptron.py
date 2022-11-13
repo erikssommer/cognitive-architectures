@@ -93,7 +93,7 @@ def clean_dataset(filename):
             df.at[index, 'y'] = 0
 
     # Save to csv
-    df.to_csv('../../data/dataset_clean.csv', index=False)
+    df.to_csv(f'../../data/{filename}.csv', index=False)
 
 
 def read_file(filename):
